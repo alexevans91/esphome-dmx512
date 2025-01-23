@@ -51,6 +51,8 @@ class DMX512 : public Component {
 
   void write_channel(uint16_t channel, uint8_t value);
 
+  void halt_updates(bool halt);
+
  protected:
 
   esphome::uart::UARTComponent *uart_{nullptr};
