@@ -51,8 +51,20 @@ void DMX512::set_channel_used(uint16_t channel) {
 
 void DMX512::write_channel(uint16_t channel, uint8_t value) {
   ESP_LOGD(TAG, "write_channel %d: %d", channel, value);
-  this->device_values_[channel] = value;
-  this->update_ = true;
+  if (this->halt_update_) {
+      this->pending_device_values_[channel] = value;
+  } else {
+    this->device_values_[channel] = value;
+    this->update_ = true;
+  }
+}
+
+void DMX512::halt_updates(bool halt) {
+  this->halt_update_ = halt;
+  if (!halt) {
+    std::copy(this->pending_device_values_, this->pending_device_values_ + DMX_MSG_SIZE, this->device_values_);
+    this->update_ = true;
+  }
 }
 
 void DMX512Output::set_channel(uint16_t channel) {
