@@ -53,6 +53,8 @@ class DMX512 : public Component {
 
   void halt_updates(bool halt);
 
+  void halt_refresh(bool halt);
+
  protected:
 
   esphome::uart::UARTComponent *uart_{nullptr};
